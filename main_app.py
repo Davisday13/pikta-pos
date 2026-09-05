@@ -437,8 +437,8 @@ tk.Tk.report_callback_exception = _tk_report_callback_exception
 # =============================================================================
 # CONFIGURACIÓN DE CONEXIÓN (NUBE VS LOCAL)
 # =============================================================================
-USE_CLOUD = False  # Cambiar a True para modo nube (PythonAnywhere)
-CLOUD_URL = "https://Davis2025.pythonanywhere.com"
+USE_CLOUD = True  # True = conecta a Render (nube), False = solo local
+CLOUD_URL = "https://pikta-pos.onrender.com"
 CLOUD_TOKEN = os.environ.get('PIKTA_CLOUD_TOKEN', 'PIKTA_CLOUD_2025_SECURE_TOKEN')
 
 DB_NAME = "PIk'TADB.db"  # Nombre del archivo de base de datos SQLite
