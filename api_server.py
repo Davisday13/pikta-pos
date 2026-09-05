@@ -148,6 +148,53 @@ def create_jwt(user_id, username, rol, nombre_completo):
     }
     return jwt.encode(payload, JWT_SECRET, algorithm='HS256')
 
+# ─── Ruta raíz ──────────────────────────────────────────
+
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        "status": "success",
+        "service": "PIK'TA POS API",
+        "version": SYSTEM_VERSION,
+        "endpoints": {
+            "version": "/api/version",
+            "login": "/api/login",
+            "menu": "/api/menu",
+            "usuarios": "/api/usuarios",
+            "pedidos": "/api/pedidos",
+            "inventario": "/api/inventario",
+            "cierres": "/api/cierres",
+            "caja": "/api/caja",
+            "seguridad": "/api/seguridad",
+            "publicidad": "/api/publicidad",
+            "images": "/api/images/<nombre>",
+            "sql_proxy": "/api/sql/proxy"
+        },
+        "docs": "API REST para sistema POS de restaurante",
+        "timestamp": datetime.now().isoformat()
+    })
+
+@app.route('/api/status', methods=['GET'])
+def get_status():
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        tables = cursor.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+        conn.close()
+        return jsonify({
+            "status": "success",
+            "message": "Servidor funcionando correctamente",
+            "version": SYSTEM_VERSION,
+            "database": "connected",
+            "tables": [t[0] for t in tables],
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Error de conexion: {str(e)}"
+        }), 500
+
 # ─── Endpoints Públicos ─────────────────────────────────
 
 @app.route('/api/login', methods=['POST', 'OPTIONS'])
